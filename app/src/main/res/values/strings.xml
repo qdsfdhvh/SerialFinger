@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FingerTest</string>
+    <string name="btn_start">开始</string>
+    <string name="btn_stop">停止</string>
+</resources>
