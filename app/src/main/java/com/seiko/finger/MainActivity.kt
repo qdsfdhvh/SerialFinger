@@ -22,53 +22,44 @@ class MainActivity : AppCompatActivity() {
     private val register by lazy(LazyThreadSafetyMode.NONE) {
         RegisterModule(object :
             RegisterModule.Callback {
-            override fun onBehavior(
-                type: RegisterModule.Behavior,
-                errCode: Int
-            ) {
-                runOnUiThread {
-                    when (type) {
-                        RegisterModule.Behavior.NOT_GENERATE -> {
-                            stopFinger()
-                            textView.text = FingerContracts.getErrMsg(errCode)
-                        }
-                        RegisterModule.Behavior.START_MERGE -> {
-                            textView.text = "开始合并模板..."
-                        }
-                        RegisterModule.Behavior.NOT_MERGE -> {
-                            stopFinger()
-                            textView.text = FingerContracts.getErrMsg(errCode)
-                        }
-                        RegisterModule.Behavior.START_MATCH -> {
-                            textView.text = "请再次按下，进行测试..."
-                        }
-                        RegisterModule.Behavior.NOT_MATCH -> {
-                            stopFinger()
-                            textView.text = FingerContracts.getErrMsg(errCode)
-                        }
-                        RegisterModule.Behavior.START_UP_CHAR -> {
-                            textView.text = "测试通过，正在获取模板数据..."
-                        }
-                        RegisterModule.Behavior.NOT_UP_CHAR -> {
-                            stopFinger()
-                            textView.text = FingerContracts.getErrMsg(errCode)
-                        }
+            override fun onBehavior(type: RegisterModule.Behavior, errCode: Int) {
+                when (type) {
+                    RegisterModule.Behavior.NOT_GENERATE -> {
+                        stopFinger()
+                        textView.text = FingerContracts.getErrMsg(errCode)
+                    }
+                    RegisterModule.Behavior.START_MERGE -> {
+                        textView.text = "开始合并模板..."
+                    }
+                    RegisterModule.Behavior.NOT_MERGE -> {
+                        stopFinger()
+                        textView.text = FingerContracts.getErrMsg(errCode)
+                    }
+                    RegisterModule.Behavior.START_MATCH -> {
+                        textView.text = "请再次按下，进行测试..."
+                    }
+                    RegisterModule.Behavior.NOT_MATCH -> {
+                        stopFinger()
+                        textView.text = FingerContracts.getErrMsg(errCode)
+                    }
+                    RegisterModule.Behavior.START_UP_CHAR -> {
+                        textView.text = "测试通过，正在获取模板数据..."
+                    }
+                    RegisterModule.Behavior.NOT_UP_CHAR -> {
+                        stopFinger()
+                        textView.text = FingerContracts.getErrMsg(errCode)
                     }
                 }
             }
 
             override fun onMerge(index: Int, max: Int) {
-                runOnUiThread {
-                    textView.text = "再按一次：$index/$max..."
-                }
+                textView.text = "再按一次：$index/$max..."
             }
 
             override fun onReceive(bytes: ByteArray) {
-                runOnUiThread {
-                    stopFinger()
-                    val msg = "获得一组有效指纹字节：${bytes.size}。"
-                    textView.text = msg
-                }
+                stopFinger()
+                val msg = "获得一组有效指纹字节：${bytes.size}。"
+                textView.text = msg
             }
         })
     }

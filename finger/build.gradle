@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -27,8 +27,8 @@ android {
 
 dependencies {
     // 串口通讯
-    api 'com.seiko.serial:serial-rs232:0.0.15'
-    api 'com.seiko.serial:serial-target:0.0.15'
+    api 'com.seiko.serial:serial-rs232:0.0.17'
+    api 'com.seiko.serial:serial-target:0.0.17'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

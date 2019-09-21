@@ -192,7 +192,7 @@ class RegisterModule(private val callback: Callback): BaseFingerModule() {
         override fun onSuccess(bean: FingerBean): Boolean {
             when(bean.prefix) {
                 RCM_PREFIX_CODE -> {
-                    // 获得指纹模板反馈包，确认数据长度
+                    // 接收一个指纹模板反馈包，确认数据长度，不需要处理，返回false继续接收。
 //                    val len = bean.data.toModBus2Int()
                     return false
                 }

@@ -9,34 +9,13 @@ import okio.Buffer
 class FingerDecode: IDecode {
 
     /** 残余缓冲区 **/
-//    private var queueRemain: Queue<Byte> = LinkedList()
     private var queueRemain = Buffer()
 
     /** 包头 **/
     private val head1 = RCM_PREFIX_CODE.toModBus2Bytes(2)
     private val head2 = RCM_DATA_PREFIX_CODE.toModBus2Bytes(2)
 
-//    override fun multiCheck(bytes: ByteArray): Observable<ByteArray> {
-//        return ObservableCreate<ByteArray> { emitter ->
-//            var bak = check(bytes)
-//            while (!bak.contentEquals(EMPTY_BYTES)) {
-//                emitter.onNext(bak)
-//                bak = check(EMPTY_BYTES)
-//            }
-//            emitter.onComplete()
-//        }
-//    }
-
     override fun check(bytes: ByteArray): ByteArray {
-//        var buffer = bytes
-//        if (queueRemain.isNotEmpty()) {
-//            if (queueRemain.size <= MAX_BUFFER_SIZE) {
-//                synchronized(this) {
-//                    buffer = queueRemain.toByteArray() + buffer
-//                }
-//            }
-//            queueRemain.clear()
-//        }
         val size = queueRemain.write(bytes).size
         val newBytes = if (size > 0) {
             val bak = queueRemain.readByteArray()
@@ -122,7 +101,5 @@ class FingerDecode: IDecode {
 
     companion object {
         private val EMPTY_BYTES = ByteArray(0)
-
-//        private const val MAX_BUFFER_SIZE = 1024 * 10
     }
 }
