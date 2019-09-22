@@ -7,7 +7,7 @@
 **1. 项目下app的build.gradle中依赖：**
 ````gradle
 // 将x.y.z改为版本号
-implementation 'com.seiko.serial:serial-high-rfid:x.y.z'
+implementation 'com.seiko.serial:serial-finger:x.y.z'
 ````
 
 **2.实现方式**
