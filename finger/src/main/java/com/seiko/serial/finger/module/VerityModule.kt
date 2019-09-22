@@ -9,7 +9,7 @@ import com.seiko.serial.finger.FingerContracts.CMD_GET_IMAGE
 import com.seiko.serial.finger.FingerContracts.CMD_SEARCH
 import java.util.concurrent.atomic.AtomicInteger
 
-class VerityDevice(private val callback: Callback): BaseFingerModule() {
+class VerityModule(private val callback: Callback): BaseFingerModule() {
 
     companion object {
 
@@ -102,53 +102,6 @@ class VerityDevice(private val callback: Callback): BaseFingerModule() {
         }
     }
 
-//    override fun onReceive(bean: FingerBean) {
-//        super.onReceive(bean)
-//        when(bean.cmd) {
-////            CMD_GET_IMAGE -> {
-////                when(bean.code) {
-////                    ERR_SUCCESS -> {
-////                        FingerContracts.generate(0).post()
-////                    }
-////                    else -> {
-////                        FingerContracts.bind(CMD_GET_IMAGE).post()
-////                    }
-////                }
-////            }
-////            CMD_GENERATE -> {
-////                when(bean.code) {
-////                    ERR_SUCCESS -> {
-////                        FingerContracts.search().post()
-////                    }
-////                    else -> {
-////                        triggers.onNext(Behavior.BAD_QUALITY to bean.getMsg())
-////                        FingerContracts.bind(CMD_GET_IMAGE).post()
-////                    }
-////                }
-////            }
-////            CMD_SEARCH -> {
-////                when(bean.code) {
-////                    ERR_SUCCESS -> {
-//////                        triggers.onNext(type.VERITY_SUCCESS to "验证成功，正在提交后台...")
-////                        triggers.onNext(Behavior.VERITY_SUCCESS to La.name_finger_toast_search_success)
-////                    }
-////                    else -> {
-////                        val count = verifyCount.getAndAdd(1)
-////                        if (count < MAX_VERITY_COUNT) {
-//////                            triggers.onNext(type.TRY_AGAIN to "验证失败，再试一次：$count/$MAX_VERITY_COUNT")
-////                            triggers.onNext(Behavior.TRY_AGAIN to La.name_finger_toast_search_again_format.format(count, MAX_VERITY_COUNT))
-////                            Thread.sleep(1000)
-////                            FingerContracts.bind(CMD_GET_IMAGE).post()
-////                        } else {
-//////                            triggers.onNext(type.VERITY_FAILED to "本次点名失败。")
-////                            triggers.onNext(Behavior.VERITY_FAILED to La.name_finger_toast_search_failed)
-////                        }
-////                    }
-////                }
-////            }
-//        }
-//    }
-
     enum class Behavior {
         BAD_QUALITY,    // 图像质量不好
 //        TRY_AGAIN,      // 重新验证
@@ -157,7 +110,7 @@ class VerityDevice(private val callback: Callback): BaseFingerModule() {
     }
     interface Callback {
         fun onBehavior(type: Behavior, errCode: Int)
-        fun onTryAgain(count: Int, max: Int)
+        fun onTryAgain(index: Int, max: Int)
     }
 
 }

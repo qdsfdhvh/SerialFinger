@@ -7,6 +7,7 @@ import com.seiko.serial.finger.FingerContracts
 import com.seiko.serial.finger.FingerDecode
 import com.seiko.serial.finger.module.RegisterModule
 import com.seiko.serial.finger.SumFilter
+import com.seiko.serial.finger.module.VerityModule
 import com.seiko.serial.rs232.RS232SerialPort
 import com.seiko.serial.rs232.SerialPortPath
 import com.seiko.serial.target.SerialTarget
@@ -16,12 +17,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 @SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
 
-    private var target: SerialTarget? = null
-
+    private lateinit var target: SerialTarget
 
     private val register by lazy(LazyThreadSafetyMode.NONE) {
-        RegisterModule(object :
-            RegisterModule.Callback {
+        RegisterModule(object : RegisterModule.Callback {
             override fun onBehavior(type: RegisterModule.Behavior, errCode: Int) {
                 when (type) {
                     RegisterModule.Behavior.NOT_GENERATE -> {
@@ -64,16 +63,39 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private val verity by lazy(LazyThreadSafetyMode.NONE) {
+        VerityModule(object : VerityModule.Callback {
+            override fun onBehavior(type: VerityModule.Behavior, errCode: Int) {
+                when(type) {
+                    VerityModule.Behavior.BAD_QUALITY -> {
+                        // 指纹质量不好
+                    }
+                    VerityModule.Behavior.VERITY_FAILED -> {
+                        // 指纹验证失败
+                    }
+                    VerityModule.Behavior.VERITY_SUCCESS -> {
+                        // 指纹验证成功
+                    }
+                }
+            }
+
+            override fun onTryAgain(index: Int, max: Int) {
+                // 再试一次 index/max
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViews()
         openTarget()
+        initFingerRegister()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        closeTarget()
+        target.close()
     }
 
     private fun initViews() {
@@ -106,10 +128,17 @@ class MainActivity : AppCompatActivity() {
         target.iDecode = FingerDecode()
         target.iFilter = SumFilter()
         target.start()
+        this.target = target
+
         target.addSerialModule(register)
     }
 
-    private fun closeTarget() {
-        target?.close()
+    private fun initFingerRegister() {
+        target.addSerialModule(register)
     }
+
+    private fun initFingerVerity() {
+        target.addSerialModule(verity)
+    }
+
 }
